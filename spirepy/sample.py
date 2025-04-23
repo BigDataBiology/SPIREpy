@@ -1,15 +1,13 @@
 import os
-import io
 import subprocess
 
-import requests
 import urllib.request
 
-import pandas as pd
+import polars as pl
 import os.path as path
 
-from .study import Study
-from spirepy.data import genome_metadata
+from spirepy.study import Study
+from spirepy.metadata import cluster_metadata
 from spirepy.logger import logger
 from spirepy.util import clean_emapper_data
 
@@ -39,7 +37,6 @@ class Sample:
         self.out_folder = path.join(study.folder, self.id)
         self._eggnog_data = None
         self._mags = None
-        self._reconstructions = None
         self._metadata = None
         self._manifest = None
 
@@ -70,41 +67,31 @@ class Sample:
     @property
     def mags(self, download: bool = False):
         if self._mags is None:
-            spire_meta = genome_metadata()
-            masked = spire_meta.loc[spire_meta["derived_from_sample"] == self.id]
-            self._mags = masked
+            cluster_meta = cluster_metadata()
+            clusters = self.metadata.filter(self.metadata["spire_cluster"] != "null")
+            mags = cluster_meta.filter(
+                cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
+            )
+            self._mags = mags
         if download:
             self.download_mags()
         return self._mags
 
     @property
-    def reconstructions(self):
-        if self._reconstructions is None:
-            list_reconstructions = []
-            logger.warning("Starting reconstruction process...")
-            for mag in self.mags.genome_id.tolist():
-                recon = self.reconstruct(mag)
-                list_reconstructions.append(recon)
-                print(f"Finished reconstruction for {mag}")
-        self._reconstructions = list_reconstructions
-        return self._reconstructions
-
-    @property
     def metadata(self):
         if self._metadata is None:
             logger.warning("No sample metadata, downloading from SPIRE...\n")
-            url = requests.get(
-                f"https://spire.embl.de/api/sample/{self.id}?format=tsv"
-            ).text
-            sample_meta = pd.read_csv(io.StringIO(url), sep="\t")
+            sample_meta = pl.read_csv(
+                f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
+            )
             self._metadata = sample_meta
         return self._metadata
 
-    @property
-    def manifest(self):
-        if self._manifest is None:
-            self._manifest = self.generate_manifest()
-        return self._manifest
+    # @property
+    # def manifest(self):
+    #     if self._manifest is None:
+    #         self._manifest = self.generate_manifest()
+    #     return self._manifest
 
     def download_mags(self):
         mag_folder = path.join(self.out_folder, "mags/")
@@ -115,48 +102,37 @@ class Sample:
                 path.join(mag_folder, "{mag}.fa.gz"),
             )
 
-    def generate_manifest(self):
-        manif = []
-        reconstruction_folder = path.join(self.out_folder, "reconstructions/")
-        for _, genome in self.mags.iterrows():
-            manif.append(
-                [
-                    genome.genome_id,
-                    genome.domain,
-                    genome.phylum,
-                    genome["class"],
-                    genome.order,
-                    genome.family,
-                    genome.genus,
-                    genome.species,
-                    f"{reconstruction_folder}{genome.genome_id}.xml",
-                    genome.derived_from_sample,
-                ]
-            )
+    # def generate_manifest(self):
+    #     manif = []
+    #     for _, genome in self.mags.iterrows():
+    #         manif.append(
+    #             [
+    #                 genome.genome_id,
+    #                 genome.domain,
+    #                 genome.phylum,
+    #                 genome["class"],
+    #                 genome.order,
+    #                 genome.family,
+    #                 genome.genus,
+    #                 genome.species,
+    #                 genome.derived_from_sample,
+    #             ]
+    #         )
 
-        manifest = pd.DataFrame(
-            manif,
-            columns=[
-                "id",
-                "kingdom",
-                "phylum",
-                "class",
-                "order",
-                "family",
-                "genus",
-                "species",
-                "file",
-                "sample_id",
-            ],
-        )
-        manifest.groupby("sample_id")
-        return manifest
-
-    def reconstruct(self, mag):
-        reconstruction_folder = f"{self.out_folder}reconstructions/"
-        os.makedirs(reconstruction_folder, exist_ok=True)
-        input = f"{self.out_folder}mags/{mag}.fa.gz"
-        output = f"{self.out_folder}reconstructions/{mag}.xml"
-        command = f"carve --dna {input} --output {output} -i M9 -g M9 -v"
-        subprocess.check_call(command, shell=True)
-        return output
+    #     manifest = pd.DataFrame(
+    #         manif,
+    #         columns=[
+    #             "id",
+    #             "kingdom",
+    #             "phylum",
+    #             "class",
+    #             "order",
+    #             "family",
+    #             "genus",
+    #             "species",
+    #             "file",
+    #             "sample_id",
+    #         ],
+    #     )
+    #     manifest.groupby("sample_id")
+    #     return manifest

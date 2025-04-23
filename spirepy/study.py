@@ -1,7 +1,7 @@
 import io
 import os
 
-import pandas as pd
+import polars as pl
 import requests
 
 from spirepy.logger import logger
@@ -28,7 +28,6 @@ class Study:
         self.folder = out_folder
         self._metadata = None
         self._samples = None
-        self._manifest = None
 
         os.makedirs(self.folder, exist_ok=True)
 
@@ -36,31 +35,24 @@ class Study:
     def metadata(self):
         if self._metadata is None:
             logger.warning("No study metadata, downloading from SPIRE...\n")
-            url = requests.get(
-                f"https://spire.embl.de/api/study/{self.name}?format=tsv"
-            ).text
-            study_meta = pd.read_csv(io.StringIO(url), sep="\t")
+            study_meta = pl.read_csv(
+                f"https://spire.embl.de/api/study/{self.name}?format=tsv",
+                separator="\t",
+            )
             self._metadata = study_meta
         return self._metadata
 
     @property
     def samples(self):
-        from .sample import Sample
+        from spirepy.sample import Sample
 
         if self._samples is None:
             sample_list = []
-            for s in self.metadata.sample_id.tolist():
+            for s in self.metadata["sample_id"].to_list():
                 sample = Sample(s, self)
                 sample_list.append(sample)
             self._samples = sample_list
         return self._samples
-
-    @property
-    def manifest(self):
-        if self._manifest is None:
-            print("No manifest")
-
-        return self._manifest
 
     def process_all_samples(self):
         for sample in self.samples:
