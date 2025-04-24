@@ -1,13 +1,12 @@
 import os
-
+import os.path as path
 import urllib.request
 
 import polars as pl
-import os.path as path
 
-from spirepy.study import Study
-from spirepy.metadata import cluster_metadata
 from spirepy.logger import logger
+from spirepy.metadata import cluster_metadata
+from spirepy.study import Study
 from spirepy.util import clean_emapper_data
 
 
@@ -35,6 +34,7 @@ class Sample:
         self.study = study
         self.out_folder = path.join(study.folder, self.id)
         self._eggnog_data = None
+        self._amr_annotations = None
         self._mags = None
         self._metadata = None
         self._manifest = None
@@ -91,6 +91,21 @@ class Sample:
             )
             self._metadata = sample_meta
         return self._metadata
+
+    def get_amr_annotations(self, mode: str = "deeparg"):
+        mode_match = {
+            "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
+            "megares": f"https://spire.embl.de/download_abricate_megares/{self.id}",
+            "vfdb": f"https://spire.embl.de/download_abricate_vfdb/{self.id}",
+        }
+        if mode not in mode_match.keys():
+            logger.error(
+                "Invalid option, please choose one of the following: deeparg, megares, vfdb"
+            )
+            return None
+        url = [val for key, val in mode_match.items() if key == mode][0]
+        amr = pl.read_csv(url, separator="\t")
+        return amr
 
     def download_mags(self):
         mag_folder = path.join(self.out_folder, "mags/")

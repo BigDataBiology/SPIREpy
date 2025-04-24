@@ -20,9 +20,8 @@ print(f"Metadata:\n {study.metadata}\n")
 
 print("###Sample ###")
 print(f"Name: {sample.id}\n")
-print(f"Metadata: {sample.metadata}\n")
+print(f"Metadata:\n {sample.metadata}\n")
+print(f"AMR annotations (deepARG):\n {sample.get_amr_annotations()}")
+print(f"AMR annotations (megares):\n {sample.get_amr_annotations(mode='megares')}")
+print(f"AMR annotations (vfdb):\n {sample.get_amr_annotations(mode='vfdb')}")
 print(f"MAGs:\n {sample.mags}\n")
-# print(f"Abundances:\n {sample.get_abundances()}\n")
-# print(f"Manifest:\n {sample.manifest}\n")
-
-# sample.manifest.to_csv(f"{sample.out_folder}sample_manifest.csv")
