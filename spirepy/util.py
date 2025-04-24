@@ -1,6 +1,6 @@
 from os import environ
 
-import pandas as pd
+import polars as pl
 
 
 def get_ncpus():
@@ -20,7 +20,7 @@ def get_ncpus():
     return int(tokens[1])
 
 
-def clean_emapper_data(file: str) -> pd.DataFrame:
-    data = pd.read_csv(file, skipfooter=3, skiprows=4, sep="\t")
+def clean_emapper_data(file: str) -> pl.DataFrame:
+    data = pl.read_csv(file, skip_rows=4, separator="\t")
     data.columns = data.columns.str.replace("#", "")
     return data

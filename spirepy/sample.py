@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 import urllib.request
 
@@ -72,6 +71,12 @@ class Sample:
             mags = cluster_meta.filter(
                 cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
             )
+            mags = mags.join(clusters, on="spire_cluster")
+            mags = mags.select(
+                pl.col("spire_id"),
+                pl.col("sample_id"),
+                pl.all().exclude(["spire_id", "sample_id"]),
+            )
             self._mags = mags
         if download:
             self.download_mags()
@@ -87,12 +92,6 @@ class Sample:
             self._metadata = sample_meta
         return self._metadata
 
-    # @property
-    # def manifest(self):
-    #     if self._manifest is None:
-    #         self._manifest = self.generate_manifest()
-    #     return self._manifest
-
     def download_mags(self):
         mag_folder = path.join(self.out_folder, "mags/")
         os.makedirs(mag_folder, exist_ok=True)
@@ -101,38 +100,3 @@ class Sample:
                 f"https://spire.embl.de/download_file/{mag}",
                 path.join(mag_folder, "{mag}.fa.gz"),
             )
-
-    # def generate_manifest(self):
-    #     manif = []
-    #     for _, genome in self.mags.iterrows():
-    #         manif.append(
-    #             [
-    #                 genome.genome_id,
-    #                 genome.domain,
-    #                 genome.phylum,
-    #                 genome["class"],
-    #                 genome.order,
-    #                 genome.family,
-    #                 genome.genus,
-    #                 genome.species,
-    #                 genome.derived_from_sample,
-    #             ]
-    #         )
-
-    #     manifest = pd.DataFrame(
-    #         manif,
-    #         columns=[
-    #             "id",
-    #             "kingdom",
-    #             "phylum",
-    #             "class",
-    #             "order",
-    #             "family",
-    #             "genus",
-    #             "species",
-    #             "file",
-    #             "sample_id",
-    #         ],
-    #     )
-    #     manifest.groupby("sample_id")
-    #     return manifest
