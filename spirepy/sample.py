@@ -5,7 +5,7 @@ import urllib.request
 import polars as pl
 
 from spirepy.logger import logger
-from spirepy.metadata import cluster_metadata
+from spirepy.data import cluster_metadata
 from spirepy.study import Study
 from spirepy.util import clean_emapper_data
 
