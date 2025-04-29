@@ -3,6 +3,7 @@ import os.path as path
 import urllib.request
 
 import polars as pl
+import pandas as pd
 
 from spirepy.logger import logger
 from spirepy.data import cluster_metadata
@@ -26,23 +27,20 @@ class Sample:
         Study ID to which the sample belongs to.
     """
 
-    def __init__(self, id: str, study: Study):
+    def __init__(self, id: str, study: Study = None):
         """
         Creates a new sample object.
         """
         self.id = id
         self.study = study
-        self.out_folder = path.join(study.folder, self.id)
         self._eggnog_data = None
         self._amr_annotations = None
         self._mags = None
         self._metadata = None
         self._manifest = None
 
-        os.makedirs(self.out_folder, exist_ok=True)
-
     def __str__(self):
-        return f"Sample id: {self.id} \tStudy: {self.study.name}"
+        return f"Sample id: {self.id} \tStudy: {[self.study.name if type(self.study) is Study else None]}"
 
     def __repr__(self):
         return self.__str__()
@@ -50,21 +48,27 @@ class Sample:
     @property
     def eggnog_data(self):
         if self._eggnog_data is None:
-            urllib.request.urlretrieve(
+            egg = pd.read_csv(
                 f"https://spire.embl.de/download_eggnog/{self.id}",
-                path.join(self.out_folder, "emapper_annotations.gz"),
+                sep="\t",
+                skiprows=4,
+                skipfooter=3,
+                compression="gzip",
+                engine="python",
             )
-            eggnog_data = clean_emapper_data(
-                path.join(self.out_folder, "emapper_annotations.gz")
-            )
-            eggnog_data.to_csv(
-                path.join(self.out_folder, "emapper_annotations.tsv", sep="\t")
-            )
+            eggnog_data = pl.from_pandas(egg)
             self._eggnog_data = eggnog_data
         return self._eggnog_data
 
     @property
-    def mags(self, download: bool = False):
+    def amr_annotations(self):
+        if self._amr_annotations is None:
+            amr = self.get_amr_annotations()
+            self._amr_annotations = amr
+        return self._amr_annotations
+
+    @property
+    def mags(self):
         if self._mags is None:
             cluster_meta = cluster_metadata()
             clusters = self.metadata.filter(self.metadata["spire_cluster"] != "null")
@@ -78,14 +82,11 @@ class Sample:
                 pl.all().exclude(["spire_id", "sample_id"]),
             )
             self._mags = mags
-        if download:
-            self.download_mags()
         return self._mags
 
     @property
     def metadata(self):
         if self._metadata is None:
-            logger.warning("No sample metadata, downloading from SPIRE...\n")
             sample_meta = pl.read_csv(
                 f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
             )
@@ -107,11 +108,10 @@ class Sample:
         amr = pl.read_csv(url, separator="\t")
         return amr
 
-    def download_mags(self):
-        mag_folder = path.join(self.out_folder, "mags/")
-        os.makedirs(mag_folder, exist_ok=True)
+    def download_mags(self, out_folder):
+        os.makedirs(out_folder, exist_ok=True)
         for mag in self.mags:
             urllib.request.urlretrieve(
                 f"https://spire.embl.de/download_file/{mag}",
-                path.join(mag_folder, "{mag}.fa.gz"),
+                path.join(out_folder, "{mag}.fa.gz"),
             )
