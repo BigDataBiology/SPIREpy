@@ -54,7 +54,6 @@ def main():
     )
 
     args = parser.parse_args()
-    print(args)
 
     # FIX: Won't work with all samples in SPIRE, needs to be fixed
     if re.match(r"^SAMN\d{8}$", args.input[0]):
