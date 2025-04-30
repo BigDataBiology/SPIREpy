@@ -8,7 +8,6 @@ import pandas as pd
 from spirepy.logger import logger
 from spirepy.data import cluster_metadata
 from spirepy.study import Study
-from spirepy.util import clean_emapper_data
 
 
 class Sample:

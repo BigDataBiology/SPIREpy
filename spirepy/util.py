@@ -18,9 +18,3 @@ def get_ncpus():
             "Cannot handle this type of environment ({}='{}')".format(ev, environ[ev])
         )
     return int(tokens[1])
-
-
-def clean_emapper_data(file: str) -> pl.DataFrame:
-    data = pl.read_csv(file, skip_rows=4, separator="\t")
-    data.columns = data.columns.str.replace("#", "")
-    return data
