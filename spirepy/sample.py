@@ -109,8 +109,8 @@ class Sample:
 
     def download_mags(self, out_folder):
         os.makedirs(out_folder, exist_ok=True)
-        for mag in self.mags:
+        for mag in self.mags["spire_id"].to_list():
             urllib.request.urlretrieve(
                 f"https://spire.embl.de/download_file/{mag}",
-                path.join(out_folder, "{mag}.fa.gz"),
+                path.join(out_folder, f"{mag}.fa.gz"),
             )

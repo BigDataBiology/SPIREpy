@@ -1,3 +1,7 @@
+import urllib
+import os
+import tarfile
+from tqdm import tqdm
 import os.path as path
 
 import spirepy.logger as logger
@@ -15,17 +19,22 @@ def download(item: str, target: str, output: str = "./"):
     target: str
         What you want to dowload (MAGs, metadata, genecalls, proteins)
     """
+    os.makedirs(output, exist_ok=True)
     if type(item) is Study:
         if target == "metadata":
             pass
         elif target == "manifest":
             pass
+        elif target == "mags":
+            item.download_mags(output)
         else:
             logger.error("No matching item for Study type")
     else:
-        if target == "metada":
+        if target == "metadata":
             print(item.metadata)
-        elif target == "manifes":
+        elif target == "manifest":
             print(item.manifest)
+        elif target == "mags":
+            item.download_mags(out_folder = path.join(output, item.id))
         else:
             print(item.amr_annotations)

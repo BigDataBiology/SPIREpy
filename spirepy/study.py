@@ -1,3 +1,6 @@
+import tarfile
+import os.path as path
+import urllib
 import io
 import os
 
@@ -25,11 +28,9 @@ class Study:
 
     def __init__(self, name: str, out_folder: str):
         self.name = name
-        self.folder = out_folder
         self._metadata = None
         self._samples = None
 
-        os.makedirs(self.folder, exist_ok=True)
 
     @property
     def metadata(self):
@@ -54,6 +55,13 @@ class Study:
             self._samples = sample_list
         return self._samples
 
-    def process_all_samples(self):
-        for sample in self.samples:
-            logger.info(f"Processing sample {sample.id}")
+    def download_mags(self, output):
+        urllib.request.urlretrieve(
+            f"https://swifter.embl.de/~fullam/spire/compiled/{self.name}_spire_v1_MAGs.tar",
+            path.join(output, f"{self.name}_mags.tar")
+        )
+        tar = tarfile.open(path.join(output, f"{self.name}_mags.tar"))
+        tar.extractall(path.join(output,"mags"))
+        tar.close
+                
+        

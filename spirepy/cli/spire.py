@@ -5,12 +5,11 @@ from spirepy import Study, Sample
 from spirepy.cli import download, view
 
 
-def maincall(input, action: str, target: str, output=None):
+def maincall(input, action: str, target: str, output="."):
     if action == "view":
         view(item=input, target=target)
     else:
-        pass
-        # download()
+        download(item = input, target=target, output=output)
 
 
 def main():
