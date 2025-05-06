@@ -34,7 +34,6 @@ class Study:
     @property
     def metadata(self):
         if self._metadata is None:
-            logger.warning("No study metadata, downloading from SPIRE...\n")
             study_meta = pl.read_csv(
                 f"https://spire.embl.de/api/study/{self.name}?format=tsv",
                 separator="\t",
