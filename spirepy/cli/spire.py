@@ -9,7 +9,7 @@ def maincall(input, action: str, target: str, output="."):
     if action == "view":
         view(item=input, target=target)
     else:
-        download(item = input, target=target, output=output)
+        download(item=input, target=target, output=output)
 
 
 def main():
@@ -59,7 +59,7 @@ def main():
         input = Sample(id=args.input[0])
         maincall(input, action=args.action, target=args.target)
     else:
-        input = Study(name=args.input[0], out_folder=args.output)
+        input = Study(name=args.input[0])
         maincall(input, action=args.action, target=args.target, output=args.output)
 
 

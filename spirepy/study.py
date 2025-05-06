@@ -1,13 +1,12 @@
 import tarfile
 import os.path as path
-import urllib
-import io
 import os
+import urllib
 
 import polars as pl
-import requests
 
 from spirepy.logger import logger
+from spirepy.data import genome_metadata
 
 
 class Study:
@@ -26,11 +25,11 @@ class Study:
         Folder to which the files from the study should be downloaded to.
     """
 
-    def __init__(self, name: str, out_folder: str):
+    def __init__(self, name: str):
         self.name = name
         self._metadata = None
         self._samples = None
-
+        self._mags = None
 
     @property
     def metadata(self):
@@ -55,13 +54,23 @@ class Study:
             self._samples = sample_list
         return self._samples
 
-    def download_mags(self, output):
+    @property
+    def mags(self):
+        if self._mags is None:
+            genomes = genome_metadata()
+            self._mags = genomes.filter(
+                genomes["derived_from_sample"].is_in(
+                    self.metadata["sample_id"].to_list()
+                )
+            )
+        return self._mags
+
+    def download_mags(self, output: str):
+        os.makedirs(output, exist_ok=True)
         urllib.request.urlretrieve(
             f"https://swifter.embl.de/~fullam/spire/compiled/{self.name}_spire_v1_MAGs.tar",
-            path.join(output, f"{self.name}_mags.tar")
+            path.join(output, f"{self.name}_mags.tar"),
         )
         tar = tarfile.open(path.join(output, f"{self.name}_mags.tar"))
-        tar.extractall(path.join(output,"mags"))
+        tar.extractall(path.join(output, "mags"))
         tar.close
-                
-        

@@ -32,17 +32,43 @@ class Sample:
         """
         self.id = id
         self.study = study
-        self._eggnog_data = None
-        self._amr_annotations = None
-        self._mags = None
         self._metadata = None
         self._manifest = None
+        self._mags = None
+        self._eggnog_data = None
+        self._amr_annotations = None
 
     def __str__(self):
         return f"Sample id: {self.id} \tStudy: {[self.study.name if type(self.study) is Study else None]}"
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            sample_meta = pl.read_csv(
+                f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
+            )
+            self._metadata = sample_meta
+        return self._metadata
+
+    @property
+    def mags(self):
+        if self._mags is None:
+            cluster_meta = cluster_metadata()
+            clusters = self.metadata.filter(self.metadata["spire_cluster"] != "null")
+            mags = cluster_meta.filter(
+                cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
+            )
+            mags = mags.join(clusters, on="spire_cluster")
+            mags = mags.select(
+                pl.col("spire_id"),
+                pl.col("sample_id"),
+                pl.all().exclude(["spire_id", "sample_id"]),
+            )
+            self._mags = mags
+        return self._mags
 
     @property
     def eggnog_data(self):
@@ -65,32 +91,6 @@ class Sample:
             amr = self.get_amr_annotations()
             self._amr_annotations = amr
         return self._amr_annotations
-
-    @property
-    def mags(self):
-        if self._mags is None:
-            cluster_meta = cluster_metadata()
-            clusters = self.metadata.filter(self.metadata["spire_cluster"] != "null")
-            mags = cluster_meta.filter(
-                cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
-            )
-            mags = mags.join(clusters, on="spire_cluster")
-            mags = mags.select(
-                pl.col("spire_id"),
-                pl.col("sample_id"),
-                pl.all().exclude(["spire_id", "sample_id"]),
-            )
-            self._mags = mags
-        return self._mags
-
-    @property
-    def metadata(self):
-        if self._metadata is None:
-            sample_meta = pl.read_csv(
-                f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
-            )
-            self._metadata = sample_meta
-        return self._metadata
 
     def get_amr_annotations(self, mode: str = "deeparg"):
         mode_match = {
