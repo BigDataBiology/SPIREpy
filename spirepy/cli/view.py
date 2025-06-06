@@ -20,6 +20,8 @@ def view(item: str, target: str):
     if type(item) is Study:
         if target == "metadata":
             print(item.metadata)
+        if target == "mags":
+            print(item.mags)
         elif target == "manifest":
             print(item.manifest)
         else:
@@ -33,5 +35,5 @@ def view(item: str, target: str):
             print(item.manifest)
         elif target == "eggnog":
             print(item.eggnog_data)
-        else:
+        elif target == "amr":
             print(item.amr_annotations)

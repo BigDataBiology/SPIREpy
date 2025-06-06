@@ -14,12 +14,42 @@ def maincall(input, action: str, target: str, output="."):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Interact with the SPIRE database",
+        description="""
+  _____ _____ _____ _____  ______             
+ / ____|  __ \_   _|  __ \|  ____|            
+| (___ | |__) || | | |__) | |__   _ __  _   _ 
+ \___ \|  ___/ | | |  _  /|  __| | '_ \| | | |
+ ____) | |    _| |_| | \ \| |____| |_) | |_| |
+|_____/|_|   |_____|_|  \_\______| .__/ \__, |
+                                 | |     __/ |
+                                 |_|    |___/ 
+
+Interact with the SPIRE[1] database.
+
+[1] - Thomas S B Schmidt, Anthony Fullam, Pamela Ferretti, Askarbek Orakov,
+Oleksandr M Maistrenko, Hans-Joachim Ruscheweyh, Ivica Letunic, Yiqian Duan,
+Thea Van Rossum, Shinichi Sunagawa, Daniel R Mende, Robert D Finn, Michael Kuhn,
+Luis Pedro Coelho, Peer Bork, SPIRE: a Searchable, Planetary-scale mIcrobiome
+REsource, Nucleic Acids Research, Volume 52, Issue D1, 5 January 2024, Pages
+D777–D783, https://doi.org/10.1093/nar/gkad943
+""",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
     subparsers = parser.add_subparsers(help="subcommand help", dest="action")
 
+    parser.add_argument(
+        "--sample",
+        dest="is_sample",
+        action="store_true",
+        help="The item you want to interact with is a sample",
+    )
+    parser.add_argument(
+        "--study",
+        dest="is_study",
+        action="store_true",
+        help="The item you want to interact with is a study",
+    )
     # create the parser for the "view" command
     parser_view = subparsers.add_parser("view", help="view the data from an object")
     parser_view.add_argument(
@@ -55,12 +85,13 @@ def main():
     args = parser.parse_args()
 
     # FIX: Won't work with all samples in SPIRE, needs to be fixed
-    if re.match(r"^SAMN\d{8}$", args.input[0]):
+
+    if args.is_sample:
         input = Sample(id=args.input[0])
         maincall(input, action=args.action, target=args.target)
     else:
         input = Study(name=args.input[0])
-        maincall(input, action=args.action, target=args.target, output=args.output)
+        maincall(input, action=args.action, target=args.target)
 
 
 if __name__ == "__main__":
