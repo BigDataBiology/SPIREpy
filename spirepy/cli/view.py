@@ -11,8 +11,6 @@ def view(item: str, target: str):
 
     item: str
         ID of the item to be viewed.
-    type: str
-        Type of item (study or sample).
     target: str
         What you want to view (metadata, antibiotic resistance annotations, manifest)
     """

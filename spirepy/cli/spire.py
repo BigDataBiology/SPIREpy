@@ -7,9 +7,9 @@ from spirepy.cli import download, view
 
 def maincall(input, action: str, target: str, output="."):
     if action == "view":
-        view(item=input, target=target)
+        view(input, target)
     else:
-        download(item=input, target=target, output=output)
+        download(input, target, output)
 
 
 def main():
@@ -72,14 +72,14 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
         help="target item to dowload",
     )
     parser_download.add_argument(
-        "input", metavar="INPUT", nargs="+", help="Input (study or sample ID)"
-    )
-    parser_download.add_argument(
         "-o",
         "--output",
         dest="output",
         help="output folder; defaults to current folder",
         default="./",
+    )
+    parser_download.add_argument(
+        "input", metavar="INPUT", nargs="+", help="Input (study or sample ID)", type=str
     )
 
     args = parser.parse_args()
@@ -88,10 +88,10 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
 
     if args.is_sample:
         input = Sample(id=args.input[0])
-        maincall(input, action=args.action, target=args.target)
+        maincall(input, action=args.action, target=args.target, output=args.output)
     else:
         input = Study(name=args.input[0])
-        maincall(input, action=args.action, target=args.target)
+        maincall(input, action=args.action, target=args.target, output=args.output)
 
 
 if __name__ == "__main__":
