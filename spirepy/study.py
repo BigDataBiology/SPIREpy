@@ -30,8 +30,8 @@ class Study:
         self._samples = None
         self._mags = None
 
-    @property
-    def metadata(self):
+    def get_metadata(self):
+        '''Retrieve metadata for the study'''
         if self._metadata is None:
             study_meta = pl.read_csv(
                 f"https://spire.embl.de/api/study/{self.name}?format=tsv",
