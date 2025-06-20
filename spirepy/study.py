@@ -22,8 +22,6 @@ class Study:
 
     name: str
         Internal ID for the study.
-    out_folder: str
-        Folder to which the files from the study should be downloaded to.
     """
 
     def __init__(self, name: str):

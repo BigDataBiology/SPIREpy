@@ -93,17 +93,16 @@ class Sample:
         return self._amr_annotations
 
     def get_amr_annotations(self, mode: str = "deeparg"):
-        mode_match = {
+        url = {
             "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
             "megares": f"https://spire.embl.de/download_abricate_megares/{self.id}",
             "vfdb": f"https://spire.embl.de/download_abricate_vfdb/{self.id}",
-        }
-        if mode not in mode_match.keys():
+        }.get(mode)
+        if url is None:
             logger.error(
                 "Invalid option, please choose one of the following: deeparg, megares, vfdb"
             )
             return None
-        url = [val for key, val in mode_match.items() if key == mode][0]
         amr = pl.read_csv(url, separator="\t")
         return amr
 
