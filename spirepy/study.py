@@ -1,4 +1,5 @@
 import tarfile
+import tempfile
 import os.path as path
 import os
 import urllib
@@ -65,11 +66,12 @@ class Study:
         return self._mags
 
     def download_mags(self, output: str):
-        os.makedirs(output, exist_ok=True)
-        urllib.request.urlretrieve(
-            f"https://swifter.embl.de/~fullam/spire/compiled/{self.name}_spire_v1_MAGs.tar",
-            path.join(output, f"{self.name}_mags.tar"),
-        )
-        tar = tarfile.open(path.join(output, f"{self.name}_mags.tar"))
-        tar.extractall(path.join(output, "mags"))
-        tar.close
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tarfpath = path.join(tmpdir, f"{self.name}_mags.tar")
+            urllib.request.urlretrieve(
+                f"https://swifter.embl.de/~fullam/spire/compiled/{self.name}_spire_v1_MAGs.tar",
+                tarfpath,
+            )
+            os.makedirs(output, exist_ok=True)
+            with tarfile.open(tarfpath) as tar:
+                tar.extractall(path.join(output, "mags"))
