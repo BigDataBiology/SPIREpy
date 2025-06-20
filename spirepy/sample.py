@@ -44,8 +44,8 @@ class Sample:
     def __repr__(self):
         return self.__str__()
 
-    @property
-    def metadata(self):
+    def get_metadata(self):
+        """Retrieve the metadata for a sample."""
         if self._metadata is None:
             sample_meta = pl.read_csv(
                 f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
@@ -53,11 +53,13 @@ class Sample:
             self._metadata = sample_meta
         return self._metadata
 
-    @property
-    def mags(self):
+    def get_mags(self):
+        """Retrieve the mags for a sample."""
         if self._mags is None:
             cluster_meta = cluster_metadata()
-            clusters = self.metadata.filter(self.metadata["spire_cluster"] != "null")
+            clusters = self.get_metadata().filter(
+                self.get_metadata()["spire_cluster"] != "null"
+            )
             mags = cluster_meta.filter(
                 cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
             )
@@ -70,8 +72,8 @@ class Sample:
             self._mags = mags
         return self._mags
 
-    @property
-    def eggnog_data(self):
+    def get_eggnog_data(self):
+        """Retrive the EggNOG-mapper data for a sample."""
         if self._eggnog_data is None:
             egg = pd.read_csv(
                 f"https://spire.embl.de/download_eggnog/{self.id}",
@@ -85,30 +87,27 @@ class Sample:
             self._eggnog_data = eggnog_data
         return self._eggnog_data
 
-    @property
-    def amr_annotations(self):
+    def get_amr_annotations(self, mode: str = "deeparg"):
+        """Obtain the anti-microbial resistance annotations for the sample."""
         if self._amr_annotations is None:
-            amr = self.get_amr_annotations()
+            url = {
+                "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
+                "megares": f"https://spire.embl.de/download_abricate_megares/{self.id}",
+                "vfdb": f"https://spire.embl.de/download_abricate_vfdb/{self.id}",
+            }.get(mode)
+            if url is None:
+                logger.error(
+                    "Invalid option, please choose one of the following: deeparg, megares, vfdb"
+                )
+                return None
+            amr = pl.read_csv(url, separator="\t")
             self._amr_annotations = amr
         return self._amr_annotations
 
-    def get_amr_annotations(self, mode: str = "deeparg"):
-        url = {
-            "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
-            "megares": f"https://spire.embl.de/download_abricate_megares/{self.id}",
-            "vfdb": f"https://spire.embl.de/download_abricate_vfdb/{self.id}",
-        }.get(mode)
-        if url is None:
-            logger.error(
-                "Invalid option, please choose one of the following: deeparg, megares, vfdb"
-            )
-            return None
-        amr = pl.read_csv(url, separator="\t")
-        return amr
-
     def download_mags(self, out_folder):
+        """Download the MAGs into a specified folder."""
         os.makedirs(out_folder, exist_ok=True)
-        for mag in self.mags["spire_id"].to_list():
+        for mag in self.get_mags()["spire_id"].to_list():
             urllib.request.urlretrieve(
                 f"https://spire.embl.de/download_file/{mag}",
                 path.join(out_folder, f"{mag}.fa.gz"),

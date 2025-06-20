@@ -31,7 +31,7 @@ class Study:
         self._mags = None
 
     def get_metadata(self):
-        '''Retrieve metadata for the study'''
+        """Retrieve metadata for the study"""
         if self._metadata is None:
             study_meta = pl.read_csv(
                 f"https://spire.embl.de/api/study/{self.name}?format=tsv",
@@ -40,8 +40,8 @@ class Study:
             self._metadata = study_meta
         return self._metadata
 
-    @property
-    def samples(self):
+    def get_samples(self):
+        """Retrive samples for the study"""
         from spirepy.sample import Sample
 
         if self._samples is None:
@@ -52,18 +52,19 @@ class Study:
             self._samples = sample_list
         return self._samples
 
-    @property
-    def mags(self):
+    def get_mags(self):
+        """Get a DataFrame with information regarding the MAGs."""
         if self._mags is None:
             genomes = genome_metadata()
             self._mags = genomes.filter(
                 genomes["derived_from_sample"].is_in(
-                    self.metadata["sample_id"].to_list()
+                    self.get_metadata()["sample_id"].to_list()
                 )
             )
         return self._mags
 
     def download_mags(self, output: str):
+        """Download the MAGs into a specified folder"""
         with tempfile.TemporaryDirectory() as tmpdir:
             tarfpath = path.join(tmpdir, f"{self.name}_mags.tar")
             urllib.request.urlretrieve(

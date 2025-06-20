@@ -49,10 +49,11 @@ dev = ["pytest"]
 "Source" = "https://github.com/areias03/SPIREpy"
 
 [project.scripts]
-spire = "spirepy.cli.spire:main"
+spire = "spirepy.cli:main"
 
-[tool.setuptools]
-packages = ["spirepy"]
+
+[tool.setuptools.packages]
+find = {}
 
 [tool.setuptools.dynamic]
 version = {attr = "spirepy.__version__"}

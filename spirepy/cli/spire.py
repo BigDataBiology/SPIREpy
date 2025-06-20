@@ -36,8 +36,6 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
-    subparsers = parser.add_subparsers(help="subcommand help", dest="action")
-
     parser.add_argument(
         "--sample",
         dest="is_sample",
@@ -50,6 +48,7 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
         action="store_true",
         help="The item you want to interact with is a study",
     )
+    subparsers = parser.add_subparsers(help="subcommand help", dest="action")
     # create the parser for the "view" command
     parser_view = subparsers.add_parser("view", help="view the data from an object")
     parser_view.add_argument(
@@ -84,14 +83,18 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
 
     args = parser.parse_args()
 
-    # FIX: Won't work with all samples in SPIRE, needs to be fixed
-
     if args.is_sample:
         input = Sample(id=args.input[0])
-        maincall(input, action=args.action, target=args.target, output=args.output)
+        if args.action == "view":
+            view(input, args.target)
+        else:
+            download(input, args.target, args.output)
     else:
         input = Study(name=args.input[0])
-        maincall(input, action=args.action, target=args.target, output=args.output)
+        if args.action == "view":
+            view(input, args.target)
+        else:
+            download(input, args.target, args.output)
 
 
 if __name__ == "__main__":
