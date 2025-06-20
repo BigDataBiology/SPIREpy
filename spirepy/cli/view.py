@@ -16,22 +16,24 @@ def view(item: str, target: str):
     """
 
     if type(item) is Study:
-        if target == "metadata":
-            print(item.metadata)
-        if target == "mags":
-            print(item.mags)
-        elif target == "manifest":
-            print(item.manifest)
-        else:
-            logger.error("No matching item for Study type")
+        study_match = {
+            "metadata": item.get_metadata(),
+            "mags": item.get_mags(),
+        }.get(target)
+        return [
+            print(study_match)
+            if study_match is not None
+            else logger.error("No matching item for Study type")
+        ]
     else:
-        if target == "metadata":
-            print(item.metadata)
-        if target == "mags":
-            print(item.mags)
-        elif target == "manifest":
-            print(item.manifest)
-        elif target == "eggnog":
-            print(item.eggnog_data)
-        elif target == "amr":
-            print(item.amr_annotations)
+        study_match = {
+            "metadata": item.get_metadata(),
+            "mags": item.get_mags(),
+            "eggnog": item.get_eggnog_data(),
+            "amr": item.get_amr_annotations(),
+        }.get(target)
+        return [
+            print(study_match)
+            if study_match is not None
+            else logger.error("No matching item")
+        ]

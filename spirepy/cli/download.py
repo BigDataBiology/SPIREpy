@@ -4,8 +4,8 @@ import tarfile
 from tqdm import tqdm
 import os.path as path
 
-import spirepy.logger as logger
 from spirepy import Study
+from spirepy.logger import logger
 
 
 def download(item: str, target: str, output: str):
@@ -24,19 +24,15 @@ def download(item: str, target: str, output: str):
     os.makedirs(output, exist_ok=True)
     if type(item) is Study:
         if target == "metadata":
-            item.metadata.write_csv(output)
-        elif target == "manifest":
-            pass
+            item.get_metadata().write_csv(path.join(output, f"{item.name}.csv"))
         elif target == "mags":
             item.download_mags(output)
         else:
             logger.error("No matching item for Study type")
     else:
         if target == "metadata":
-            print(item.metadata)
-        elif target == "manifest":
-            print(item.manifest)
+            item.get_metadata().write_csv(path.join(output, f"{item.id}.csv"))
         elif target == "mags":
-            item.download_mags(out_folder=path.join(output, item.id))
+            item.download_mags(output)
         else:
-            print(item.amr_annotations)
+            logger.error("No matching item")
