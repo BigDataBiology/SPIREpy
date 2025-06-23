@@ -15,6 +15,17 @@ python:
   install:
     - method: pip
       path: .
+      extra_requirements:
+        - wheel
+        - numpy
+        - Cython
+        - cryptography
+        - biom-format
+        - "nbsphinx >=0.9.0"
+        - furo
+        - sphinx-autoapi
+        - recommonmark
+        
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
