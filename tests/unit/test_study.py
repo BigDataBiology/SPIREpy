@@ -2,7 +2,7 @@ from .fixtures import study
 
 
 def test_len_samples(study):
-    assert len(study.samples) == 3
+    assert len(study.get_samples()) == 3
 
 
 def test_name(study):
