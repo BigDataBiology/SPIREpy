@@ -5,7 +5,7 @@ from spirepy import Study, Sample
 from spirepy.cli import download, view
 
 
-def maincall(input, action: str, target: str, output="."):
+def maincall(input, action: str, target: str, output: str = None):
     if action == "view":
         view(input, target)
     else:
@@ -86,15 +86,15 @@ D777–D783, https://doi.org/10.1093/nar/gkad943
     if args.is_sample:
         input = Sample(id=args.input[0])
         if args.action == "view":
-            view(input, args.target)
+            maincall(input, args.action, args.target)
         else:
-            download(input, args.target, args.output)
+            maincall(input, args.action, args.target, args.output)
     else:
         input = Study(name=args.input[0])
         if args.action == "view":
-            view(input, args.target)
+            maincall(input, args.action, args.target)
         else:
-            download(input, args.target, args.output)
+            maincall(input, args.action, args.target, args.output)
 
 
 if __name__ == "__main__":
