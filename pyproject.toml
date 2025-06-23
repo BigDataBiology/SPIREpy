@@ -38,6 +38,7 @@ classifiers = [
 dependencies = [
   "polars",
   "pandas",
+  "rich",
 ]
 
 [project.optional-dependencies]
