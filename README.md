@@ -29,19 +29,19 @@ study = Study("Lloyd-Price_2019_HMP2IBD")
 We can then obtain the list of samples that belong to this study.
 
 ```{python}
-study.samples  
+study.get_samples()  
 ```
 
 The study's metadata:
 
 ```{python}
-study.metadata
+study.get_metadata()
 ```
 
 Or even the assembled genomes:
 
 ```{python}
-study.mags  
+study.get_mags()
 ```
 
 Likewise, many of these attributes and operations are parallel to samples
@@ -67,18 +67,18 @@ spire --help
 spire --study view metadata Lloyd-Price_2019_HMP2IBD
 ```
 
-And to download the table as a .csv file we can instead:
+And to download the same table as a `.csv` file we can instead:
 
 ```{bash}
-spire --study download metadata Lloyd-Price_2019_HMP2IBD -o ./study.csv
+spire --study download metadata Lloyd-Price_2019_HMP2IBD -o study/
 ``` 
 
 ## Installation
 
-<!-- TODO: need to add to PyPI and conda first -->
+TODO: need to add to PyPI and conda first
 
 ## Documentation
 
-<!-- TODO: need readthedocs -->
+TODO: need readthedocs
 
 ## Credits
