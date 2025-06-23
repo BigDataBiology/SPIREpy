@@ -54,7 +54,7 @@ class Sample:
         return self._metadata
 
     def get_mags(self):
-        """Retrieve the mags for a sample."""
+        """Retrieve the MAGs for a sample."""
         if self._mags is None:
             cluster_meta = cluster_metadata()
             clusters = self.get_metadata().filter(
@@ -88,7 +88,14 @@ class Sample:
         return self._eggnog_data
 
     def get_amr_annotations(self, mode: str = "deeparg"):
-        """Obtain the anti-microbial resistance annotations for the sample."""
+        """Obtain the anti-microbial resistance annotations for the sample.
+
+        Parameters:
+
+        mode: str
+            Tool to select the AMR data from. Options are deepARG (deeparg),
+            abricate-megares (megares) and abricate-vfdb (vfdb). Defaults to deepARG.
+        """
         if self._amr_annotations is None:
             url = {
                 "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
@@ -105,7 +112,13 @@ class Sample:
         return self._amr_annotations
 
     def download_mags(self, out_folder):
-        """Download the MAGs into a specified folder."""
+        """Download the MAGs into a specified folder.
+
+        Parameters:
+
+        output: str
+            Output folder to download the MAGs to.
+        """
         os.makedirs(out_folder, exist_ok=True)
         for mag in self.get_mags()["spire_id"].to_list():
             urllib.request.urlretrieve(
