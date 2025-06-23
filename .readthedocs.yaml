@@ -21,7 +21,7 @@ python:
         - Cython
         - cryptography
         - biom-format
-        - nbsphinx
+        # - nbsphinx
         - furo
         - sphinx-autoapi
         - recommonmark
