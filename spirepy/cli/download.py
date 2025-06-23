@@ -1,7 +1,6 @@
 import urllib
 import os
 import tarfile
-from tqdm import tqdm
 import os.path as path
 
 from spirepy import Study
