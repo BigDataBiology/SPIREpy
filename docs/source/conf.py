@@ -6,12 +6,13 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-from spirepy import __version__
+import spirepy
+
 
 project = "SPIREpy"
 copyright = "2025, Big Data Biology Lab"
 author = "Big Data Biology Lab"
-release = __version__
+release = spirepy.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
