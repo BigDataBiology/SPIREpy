@@ -8,7 +8,7 @@ name = "spirepy"
 dynamic = ["version"]
 description = "A SPIRE wrapper and command-line tool for interacting with global microbiome data."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.7"
 license =  "MIT"
 keywords = ["bioinformatics", "microbiology", "metagenomics"]
 authors = [{ name = "SPIREpy Development Team", email = "luispedro@big-data-biology.org" }]
@@ -26,6 +26,8 @@ classifiers = [
   "Intended Audience :: Education",
   "Intended Audience :: Healthcare Industry",
 
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
