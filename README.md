@@ -1,3 +1,7 @@
+[![Test Status](https://github.com/BigDataBiology/SPIREpy/actions/workflows/python-package.yml/badge.svg)](https://github.com/BigDataBiology/SPIREpy/actions/workflows/python-package.yml)
+[![Documentation Status](https://readthedocs.org/projects/spirepy/badge/?version=latest)](https://spirepy.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # SPIREpy
 
 <!--toc:start-->
