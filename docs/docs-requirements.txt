@@ -1,3 +1,4 @@
+sphinx>=6.0
 wheel
 numpy
 Cython

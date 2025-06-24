@@ -10,8 +10,26 @@ Add your content using ``reStructuredText`` syntax. See the
 `reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
 documentation for details.
 
+Welcome
+-------
+
+
+SPIREpy is a Python package and command-line tool that allows users to interact
+with the [SPIRE](https://spire.embl.de/) database in a more convinient way.
+
+Contents
+--------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
+
+
+Installation
+------------
+
+TODO: need to add to PyPI and conda first
+
+Credits
+-------
 
