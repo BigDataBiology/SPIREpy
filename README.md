@@ -1,3 +1,4 @@
+[![PyPI Install](https://img.shields.io/pypi/v/spirepy.svg)](https://pypi.org/project/spirepy/)
 [![Test Status](https://github.com/BigDataBiology/SPIREpy/actions/workflows/python-package.yml/badge.svg)](https://github.com/BigDataBiology/SPIREpy/actions/workflows/python-package.yml)
 [![Documentation Status](https://readthedocs.org/projects/spirepy/badge/?version=latest)](https://spirepy.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -6,17 +7,24 @@
 
 <!--toc:start-->
 - [SPIREpy](#spirepy)
-  - [Usage](#usage)
-  - [Documentation](#documentation)
   - [Installation](#installation)
+  - [Quickstart](#quickstart)
+  - [Documentation](#documentation)
   - [Credits](#credits)
 <!--toc:end-->
 
 SPIREpy is a Python package and command-line tool that allows users to interact
 with the [SPIRE](https://spire.embl.de/) database in a more convinient way.
 
-## Usage
+## Installation
 
+SPIREpy is available on PyPI and can be installed via
+
+```{bash}
+pip install spirepy  
+```
+
+## Quickstart
 
 ### Python package
 
@@ -77,12 +85,15 @@ And to download the same table as a `.csv` file we can instead:
 spire --study download metadata Lloyd-Price_2019_HMP2IBD -o study/
 ``` 
 
-## Installation
-
-TODO: need to add to PyPI and conda first
-
 ## Documentation
 
-TODO: need readthedocs
+Documentation for the Python package and CLI tool can be found [here](https://spirepy.readthedocs.io/en/latest/).
 
 ## Credits
+
+These tools have been developed by the [Big Data Biology
+Lab](https://www.big-data-biology.org/) at the [Centre for Microbiome
+Research](https://research.qut.edu.au/cmr/) at the [Queensland University
+of Technology](https://www.qut.edu.au/) (Brisbane, Australia). It
+is part of the [SPIRE: a Searchable, Planetary-scale mIcrobiome
+REsource](https://spire.embl.de/) project.
