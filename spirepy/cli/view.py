@@ -15,25 +15,25 @@ def view(item: str, target: str):
         What you want to view (metadata, antibiotic resistance annotations, manifest)
     """
 
-    if type(item) is Study:
+    if isinstance(item, Study):
         study_match = {
-            "metadata": item.get_metadata(),
-            "mags": item.get_mags(),
+            "metadata": item.get_metadata,
+            "mags": item.get_mags,
         }.get(target)
-        return [
-            print(study_match)
-            if study_match is not None
-            else logger.error("No matching item for Study type")
-        ]
-    else:
-        study_match = {
-            "metadata": item.get_metadata(),
-            "mags": item.get_mags(),
-            "eggnog": item.get_eggnog_data(),
-            "amr": item.get_amr_annotations(),
+        
+        if study_match:
+            print(study_match())
+        else:
+            logger.error("No matching item for Study type")
+    else: # Assumes item is a Sample
+        sample_match = {
+            "metadata": item.get_metadata,
+            "mags": item.get_mags,
+            "eggnog": item.get_eggnog_data,
+            "amr": item.get_amr_annotations,
         }.get(target)
-        return [
-            print(study_match)
-            if study_match is not None
-            else logger.error("No matching item")
-        ]
+
+        if sample_match:
+            print(sample_match())
+        else:
+            logger.error("No matching item")
