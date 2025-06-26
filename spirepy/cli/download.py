@@ -1,18 +1,17 @@
-import urllib
 import os
-import tarfile
 import os.path as path
+from typing import Union
 
-from spirepy import Study
+from spirepy import Sample, Study
 from spirepy.logger import logger
 
 
-def download(item: str, target: str, output: str):
+def download(item: Union[Study, Sample], target: str, output: str):
     """
     Dowload data from a SPIRE item.
 
     :param item: The item to be viewed (:class:`spirepy.sample.Sample` or :class:`spirepy.study.Study`).
-    :type item: class:`spirepy.sample.Sample` or class:`spirepy.study.Study`
+    :type item: :class:`spirepy.sample.Sample` or :class:`spirepy.study.Study`
 
     :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
     :type target: str
