@@ -18,18 +18,15 @@ class Sample:
     provide all the properties and methods to allow work with samples and
     provide tools for automation and scalability.
 
-    Attributes:
+    :param id: Internal ID for the sample.
+    :type id: str
 
-    id: str
-        Internal ID for the sample.
-    study: Study
-        Study ID to which the sample belongs to.
+    :param study: The :class:'spirepy.Study' to which the sample belongs to, defaults to None.
+    :type study: class:'spirepy.Study', optional
     """
 
     def __init__(self, id: str, study: Study = None):
-        """
-        Creates a new sample object.
-        """
+        """Constructor method."""
         self.id = id
         self.study = study
         self._metadata = None
@@ -58,9 +55,7 @@ class Sample:
         if self._mags is None:
             cluster_meta = cluster_metadata()
             metadata = self.get_metadata()
-            clusters = metadata.filter(
-                metadata["spire_cluster"] != "null"
-            )
+            clusters = metadata.filter(metadata["spire_cluster"] != "null")
             mags = cluster_meta.filter(
                 cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
             )
@@ -93,9 +88,9 @@ class Sample:
 
         Parameters:
 
-        mode: str
-            Tool to select the AMR data from. Options are deepARG (deeparg),
-            abricate-megares (megares) and abricate-vfdb (vfdb). Defaults to deepARG.
+        :param mode: Tool to select the AMR data from. Options are deepARG (deeparg),
+        abricate-megares (megares) and abricate-vfdb (vfdb); defaults to deepARG.
+        :type mode: str, optional
         """
         if mode not in self._amr_annotations:
             url = {
@@ -115,10 +110,8 @@ class Sample:
     def download_mags(self, out_folder):
         """Download the MAGs into a specified folder.
 
-        Parameters:
-
-        output: str
-            Output folder to download the MAGs to.
+        :param output: Output folder to download the MAGs to.
+        :type output: str
         """
         os.makedirs(out_folder, exist_ok=True)
         for mag in self.get_mags()["spire_id"].to_list():
@@ -126,4 +119,3 @@ class Sample:
                 f"https://spire.embl.de/download_file/{mag}",
                 path.join(out_folder, f"{mag}.fa.gz"),
             )
-

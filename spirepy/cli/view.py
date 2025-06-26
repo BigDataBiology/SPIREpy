@@ -7,12 +7,11 @@ def view(item: str, target: str):
     """
     View a SPIRE item.
 
-    Arguments:
+    :param item: The item to be viewed (:class:'spirepy.Sample' or :class:'spirepy.Study').
+    :type item: str
 
-    item: str
-        ID of the item to be viewed.
-    target: str
-        What you want to view (metadata, antibiotic resistance annotations, manifest)
+    :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
+    :type target: str
     """
 
     if isinstance(item, Study):
@@ -20,12 +19,12 @@ def view(item: str, target: str):
             "metadata": item.get_metadata,
             "mags": item.get_mags,
         }.get(target)
-        
+
         if study_match:
             print(study_match())
         else:
             logger.error("No matching item for Study type")
-    else: # Assumes item is a Sample
+    else:  # Assumes item is a Sample
         sample_match = {
             "metadata": item.get_metadata,
             "mags": item.get_mags,
