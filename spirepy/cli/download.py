@@ -11,8 +11,8 @@ def download(item: str, target: str, output: str):
     """
     Dowload data from a SPIRE item.
 
-    :param item: The item to be viewed (:class:'spirepy.Sample' or :class:'spirepy.Study').
-    :type item: str
+    :param item: The item to be viewed (:class:`spirepy.sample.Sample` or :class:`spirepy.study.Study`).
+    :type item: class:`spirepy.sample.Sample` or class:`spirepy.study.Study`
 
     :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
     :type target: str

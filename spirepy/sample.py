@@ -21,8 +21,8 @@ class Sample:
     :param id: Internal ID for the sample.
     :type id: str
 
-    :param study: The :class:'spirepy.study.Study' to which the sample belongs to, defaults to None.
-    :type study: class:'spirepy.study.Study', optional
+    :param study: The :class:`spirepy.study.Study` to which the sample belongs to, defaults to None.
+    :type study: class:`spirepy.study.Study`, optional
     """
 
     def __init__(self, id: str, study: Study = None):
