@@ -22,14 +22,24 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   Quickstart <quickstart>
 
 
 Installation
 ------------
 
-TODO: need to add to PyPI and conda first
+SPIREpy is available on PyPI and can be installed via
+
+.. code-block:: bash
+
+   pip install spirepy
 
 Credits
 -------
 
+These tools have been developed by the [Big Data Biology
+Lab](https://www.big-data-biology.org/) at the [Centre for Microbiome
+Research](https://research.qut.edu.au/cmr/) at the [Queensland University
+of Technology](https://www.qut.edu.au/) (Brisbane, Australia). It
+is part of the [SPIRE: a Searchable, Planetary-scale mIcrobiome
+REsource](https://spire.embl.de/) project.
