@@ -3,7 +3,6 @@ import os.path as path
 import tarfile
 import tempfile
 import urllib
-from typing import list
 
 import polars as pl
 
