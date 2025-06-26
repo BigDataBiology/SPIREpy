@@ -33,13 +33,13 @@ class Sample:
         self.id = id
         self.study = study
         self._metadata = None
-        self._manifest = None
         self._mags = None
         self._eggnog_data = None
-        self._amr_annotations = None
+        self._amr_annotations = {}
 
     def __str__(self):
-        return f"Sample id: {self.id} \tStudy: {[self.study.name if type(self.study) is Study else None]}"
+        study_name = self.study.name if isinstance(self.study, Study) else None
+        return f"Sample id: {self.id} 	Study: {study_name}"
 
     def __repr__(self):
         return self.__str__()
@@ -57,8 +57,9 @@ class Sample:
         """Retrieve the MAGs for a sample."""
         if self._mags is None:
             cluster_meta = cluster_metadata()
-            clusters = self.get_metadata().filter(
-                self.get_metadata()["spire_cluster"] != "null"
+            metadata = self.get_metadata()
+            clusters = metadata.filter(
+                metadata["spire_cluster"] != "null"
             )
             mags = cluster_meta.filter(
                 cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
@@ -96,7 +97,7 @@ class Sample:
             Tool to select the AMR data from. Options are deepARG (deeparg),
             abricate-megares (megares) and abricate-vfdb (vfdb). Defaults to deepARG.
         """
-        if self._amr_annotations is None:
+        if mode not in self._amr_annotations:
             url = {
                 "deeparg": f"https://spire.embl.de/download_deeparg/{self.id}",
                 "megares": f"https://spire.embl.de/download_abricate_megares/{self.id}",
@@ -108,8 +109,8 @@ class Sample:
                 )
                 return None
             amr = pl.read_csv(url, separator="\t")
-            self._amr_annotations = amr
-        return self._amr_annotations
+            self._amr_annotations[mode] = amr
+        return self._amr_annotations[mode]
 
     def download_mags(self, out_folder):
         """Download the MAGs into a specified folder.
@@ -125,3 +126,4 @@ class Sample:
                 f"https://spire.embl.de/download_file/{mag}",
                 path.join(out_folder, f"{mag}.fa.gz"),
             )
+
