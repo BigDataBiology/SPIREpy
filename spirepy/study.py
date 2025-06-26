@@ -18,13 +18,12 @@ class Study:
     fetches metadata and automates the initialization of samples to further use
     to obtain its genomic, geographical or other types of data provided by it.
 
-    Attributes:
-
-    name: str
-        Internal ID for the study.
+    :param name: Internal ID for the study.
+    :type name: str
     """
 
     def __init__(self, name: str):
+        """Constructor method."""
         self.name = name
         self._metadata = None
         self._samples = None
@@ -66,10 +65,8 @@ class Study:
     def download_mags(self, output: str):
         """Download the MAGs into a specified folder.
 
-        Parameters:
-
-        output: str
-            Output folder to download the MAGs to.
+        :param output: Output folder to download the MAGs to.
+        :type output: str
         """
         with tempfile.TemporaryDirectory() as tmpdir:
             tarfpath = path.join(tmpdir, f"{self.name}_mags.tar")

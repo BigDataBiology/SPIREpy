@@ -11,14 +11,14 @@ def download(item: str, target: str, output: str):
     """
     Dowload data from a SPIRE item.
 
-    Arguments:
+    :param item: The item to be viewed (:class:'spirepy.Sample' or :class:'spirepy.Study').
+    :type item: str
 
-    item: str
-        ID of the target item.
-    target: str
-        What you want to dowload (MAGs, metadata, genecalls, proteins).
-    output: str
-        The output folder where the items will be downloaded.
+    :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
+    :type target: str
+
+    :param output: The output folder where the items will be downloaded.
+    :type output: str
     """
     os.makedirs(output, exist_ok=True)
     if type(item) is Study:
