@@ -7,7 +7,7 @@ def view(item: str, target: str):
     """
     View a SPIRE item.
 
-    :param item: The item to be viewed (:class:'spirepy.Sample' or :class:'spirepy.Study').
+    :param item: The item to be viewed (:class:'spirepy.sample.Sample' or :class:'spirepy.study.Study').
     :type item: str
 
     :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
