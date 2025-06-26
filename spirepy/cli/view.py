@@ -1,14 +1,15 @@
-import polars as pl
-from spirepy import Study, Sample
+from typing import Union
+
+from spirepy import Sample, Study
 from spirepy.logger import logger
 
 
-def view(item: str, target: str):
+def view(item: Union[Study, Sample], target: str):
     """
     View a SPIRE item.
 
     :param item: The item to be viewed (:class:`spirepy.sample.Sample` or :class:`spirepy.study.Study`).
-    :type item: class:`spirepy.sample.Sample` or class:`spirepy.study.Study`
+    :type item: :class:`spirepy.sample.Sample` or :class:`spirepy.study.Study`
 
     :param target: What you want to view (metadata, antibiotic resistance annotations, manifest)
     :type target: str

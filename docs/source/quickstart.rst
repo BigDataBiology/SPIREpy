@@ -51,7 +51,7 @@ These 2 sub-commands allows us to print tables and download data from both studi
  
 	spire --help
 
- To view a study's metadata we can use:
+To view a study's metadata we can use:
 
 .. code-block:: bash
  

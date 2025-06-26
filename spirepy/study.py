@@ -1,12 +1,12 @@
+import os
+import os.path as path
 import tarfile
 import tempfile
-import os.path as path
-import os
 import urllib
+from typing import list
 
 import polars as pl
 
-from spirepy.logger import logger
 from spirepy.data import genome_metadata
 
 
@@ -29,8 +29,12 @@ class Study:
         self._samples = None
         self._mags = None
 
-    def get_metadata(self):
-        """Retrieve metadata for the study."""
+    def get_metadata(self) -> pl.dataframe.DataFrame:
+        """Retrieve metadata for the study.
+
+        :return: A Dataframe with the study's metadata.
+        :rtype: :class:`polars.dataframe.DataFrame`
+        """
         if self._metadata is None:
             study_meta = pl.read_csv(
                 f"https://spire.embl.de/api/study/{self.name}?format=tsv",
@@ -39,8 +43,12 @@ class Study:
             self._metadata = study_meta
         return self._metadata
 
-    def get_samples(self):
-        """Retrive samples for the study."""
+    def get_samples(self) -> list:
+        """Retrive a list of samples for the study.
+
+        :return: List of :class:`spirepy.sample.Sample` that belong to the study.
+        :rtype: list
+        """
         from spirepy.sample import Sample
 
         if self._samples is None:
@@ -51,8 +59,12 @@ class Study:
             self._samples = sample_list
         return self._samples
 
-    def get_mags(self):
-        """Get a DataFrame with information regarding the MAGs."""
+    def get_mags(self) -> pl.dataframe.DataFrame:
+        """Get a DataFrame with information regarding the MAGs.
+
+        :return: A Dataframe with the study's MAGs.
+        :rtype: :class:`polars.dataframe.DataFrame`
+        """
         if self._mags is None:
             genomes = genome_metadata()
             self._mags = genomes.filter(
