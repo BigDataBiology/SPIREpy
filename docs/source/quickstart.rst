@@ -34,7 +34,7 @@ Or even the assembled genomes:
 	study.get_mags()
 
 Likewise, many of these attributes and operations are parallel to samples
-(`Sample` class) as well.
+(:class:`spirepy.sample.Sample`) as well.
 
 Command-line tool
 -----------------
