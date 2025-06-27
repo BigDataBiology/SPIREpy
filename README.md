@@ -97,3 +97,18 @@ Research](https://research.qut.edu.au/cmr/) at the [Queensland University
 of Technology](https://www.qut.edu.au/) (Brisbane, Australia). It
 is part of the [SPIRE: a Searchable, Planetary-scale mIcrobiome
 REsource](https://spire.embl.de/) project.
+
+
+SPIRE is published in
+
+```{}
+Thomas S B Schmidt, Anthony Fullam, Pamela Ferretti, Askarbek Orakov, Oleksandr
+M Maistrenko, Hans-Joachim Ruscheweyh, Ivica Letunic, Yiqian Duan, Thea Van
+Rossum, Shinichi Sunagawa, Daniel R Mende, Robert D Finn, Michael Kuhn, Luis
+Pedro Coelho, Peer Bork, SPIRE: a Searchable, Planetary-scale mIcrobiome
+REsource, Nucleic Acids Research, Volume 52, Issue D1, 5 January 2024, Pages
+D777–D783
+https://doi.org/10.1093/nar/gkad943
+```
+
+Please cite this publication when referencing SPIREpy.
