@@ -39,6 +39,8 @@ dependencies = [
   "polars",
   "pandas",
   "rich",
+  "joblib",
+  "platformdirs",
 ]
 
 [project.optional-dependencies]
