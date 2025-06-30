@@ -67,10 +67,10 @@ class Study:
         if self._mags is None:
             genomes = genome_metadata()
             self._mags = genomes.filter(
-                genomes["derived_from_sample"].is_in(
-                    self.get_metadata()["sample_id"].to_list()
+                    pl.col("derived_from_sample").is_in(
+                        self.get_metadata()["sample_id"].to_list()
+                    )
                 )
-            )
         return self._mags
 
     def download_mags(self, output: str):

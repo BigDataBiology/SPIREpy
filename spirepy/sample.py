@@ -2,7 +2,6 @@ import os
 import os.path as path
 import urllib.request
 
-import pandas as pd
 import polars as pl
 
 from spirepy.data import cluster_metadata
@@ -63,9 +62,11 @@ class Sample:
         if self._mags is None:
             cluster_meta = cluster_metadata()
             metadata = self.get_metadata()
-            clusters = metadata.filter(metadata["spire_cluster"] != "null")
+            clusters = metadata.filter(
+                    pl.col("spire_cluster").is_not_null()
+                    )
             mags = cluster_meta.filter(
-                cluster_meta["spire_cluster"].is_in(clusters["spire_cluster"])
+                    pl.col("spire_cluster").is_in(clusters["spire_cluster"])
             )
             mags = mags.join(clusters, on="spire_cluster")
             mags = mags.select(
@@ -83,6 +84,9 @@ class Sample:
         :rtype: :class:`polars.dataframe.DataFrame`
         """
         if self._eggnog_data is None:
+            # We need to use pandas because polars does not support reading
+            # files with a footer
+            import pandas as pd
             egg = pd.read_csv(
                 f"https://spire.embl.de/download_eggnog/{self.id}",
                 sep="\t",
