@@ -90,7 +90,7 @@ class TestSample(unittest.TestCase):
         mock_cluster_metadata.assert_called_once()
         assert_frame_equal(result2, expected_mags)
 
-    @patch("spirepy.sample.pd.read_csv")
+    @patch("pandas.read_csv")
     def test_get_eggnog_data(self, mock_read_csv: MagicMock):
         """Tests get_eggnog_data for data retrieval and caching."""
         mock_df = pd.DataFrame({"gene": ["gene1"], "annotation": ["annot1"]})

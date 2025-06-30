@@ -2,7 +2,6 @@ import os
 import os.path as path
 import urllib.request
 
-import pandas as pd
 import polars as pl
 
 from spirepy.data import cluster_metadata
@@ -83,6 +82,7 @@ class Sample:
         :rtype: :class:`polars.dataframe.DataFrame`
         """
         if self._eggnog_data is None:
+            import pandas as pd
             egg = pd.read_csv(
                 f"https://spire.embl.de/download_eggnog/{self.id}",
                 sep="\t",
