@@ -44,50 +44,43 @@ class TestSample(unittest.TestCase):
         mock_read_csv.assert_called_once()  # Should still be called only once
         assert_frame_equal(result2, mock_data)
 
-    @patch("spirepy.sample.cluster_metadata")
+    @patch("spirepy.sample.genome_metadata")
     @patch.object(Sample, "get_metadata")
     def test_get_mags(
-        self, mock_get_metadata: MagicMock, mock_cluster_metadata: MagicMock
+        self, mock_get_metadata: MagicMock, mock_genome_metadata: MagicMock
     ):
         """Tests get_mags for data processing and caching."""
         # Mock input data
-        mock_sample_metadata = pl.DataFrame(
-            {
-                "sample_id": [self.sample_id, self.sample_id, self.sample_id],
-                "spire_cluster": ["CLUSTER_A", "CLUSTER_B", "null"],
-            }
-        )
-        mock_get_metadata.return_value = mock_sample_metadata
+        mock_get_metadata.return_value = pl.DataFrame({"sample_id": [self.sample_id]})
 
-        mock_cluster_data = pl.DataFrame(
+        mock_genome_data = pl.DataFrame(
             {
-                "spire_cluster": ["CLUSTER_A", "CLUSTER_B", "CLUSTER_C"],
+                "derived_from_sample": [self.sample_id, "OTHER_SAMPLE", self.sample_id],
                 "spire_id": ["MAG_A", "MAG_B", "MAG_C"],
                 "quality": [90, 95, 88],
             }
         )
-        mock_cluster_metadata.return_value = mock_cluster_data
+        mock_genome_metadata.return_value = mock_genome_data
 
-        # Expected result after filtering, joining, and selecting
+        # Expected result after filtering
         expected_mags = pl.DataFrame(
             {
-                "spire_id": ["MAG_A", "MAG_B"],
-                "sample_id": [self.sample_id, self.sample_id],
-                "spire_cluster": ["CLUSTER_A", "CLUSTER_B"],
-                "quality": [90, 95],
+                "derived_from_sample": [self.sample_id, self.sample_id],
+                "spire_id": ["MAG_A", "MAG_C"],
+                "quality": [90, 88],
             }
         )
 
         # First call - should process data
         result1 = self.sample.get_mags()
         mock_get_metadata.assert_called_once()
-        mock_cluster_metadata.assert_called_once()
+        mock_genome_metadata.assert_called_once()
         assert_frame_equal(result1, expected_mags)
 
         # Second call - should use cache
         result2 = self.sample.get_mags()
         mock_get_metadata.assert_called_once()
-        mock_cluster_metadata.assert_called_once()
+        mock_genome_metadata.assert_called_once()
         assert_frame_equal(result2, expected_mags)
 
     @patch("pandas.read_csv")
