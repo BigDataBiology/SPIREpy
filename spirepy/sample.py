@@ -4,7 +4,7 @@ import urllib.request
 
 import polars as pl
 
-from spirepy.data import cluster_metadata
+from spirepy.data import genome_metadata
 from spirepy.logger import logger
 from spirepy.study import Study
 
@@ -60,20 +60,9 @@ class Sample:
         :rtype: :class:`polars.dataframe.DataFrame`
         """
         if self._mags is None:
-            cluster_meta = cluster_metadata()
+            genome_meta = genome_metadata()
             metadata = self.get_metadata()
-            clusters = metadata.filter(
-                    pl.col("spire_cluster").is_not_null()
-                    )
-            mags = cluster_meta.filter(
-                    pl.col("spire_cluster").is_in(clusters["spire_cluster"])
-            )
-            mags = mags.join(clusters, on="spire_cluster")
-            mags = mags.select(
-                pl.col("spire_id"),
-                pl.col("sample_id"),
-                pl.all().exclude(["spire_id", "sample_id"]),
-            )
+            mags = genome_meta.filter(pl.col("derived_from_sample") == self.id)
             self._mags = mags
         return self._mags
 
