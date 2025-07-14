@@ -32,6 +32,7 @@ class Sample:
         self._mags = None
         self._eggnog_data = None
         self._amr_annotations = {}
+        self._contig_depths = None
 
     def __str__(self):
         study_name = self.study.name if isinstance(self.study, Study) else None
@@ -76,6 +77,7 @@ class Sample:
             # We need to use pandas because polars does not support reading
             # files with a footer
             import pandas as pd
+
             egg = pd.read_csv(
                 f"https://spire.embl.de/download_eggnog/{self.id}",
                 sep="\t",
@@ -111,6 +113,15 @@ class Sample:
             amr = pl.read_csv(url, separator="\t")
             self._amr_annotations[mode] = amr
         return self._amr_annotations[mode]
+
+    def get_contig_depths(self):
+        if self._contig_depths is None:
+            cont_depths = pl.read_csv(
+                f"https://spire.embl.de/download_contig_depths/{self.id}",
+                separator="\t",
+            )
+            self._contig_depths = cont_depths
+        return self._contig_depths
 
     def download_mags(self, out_folder: str):
         """Download the MAGs into a specified folder.
