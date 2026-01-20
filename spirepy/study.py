@@ -36,7 +36,7 @@ class Study:
         """
         if self._metadata is None:
             study_meta = pl.read_csv(
-                f"https://spire.embl.de/api/study/{self.name}?format=tsv",
+                f"https://spire.embl.de/spire/api/study/{self.name}?format=tsv",
                 separator="\t",
             )
             self._metadata = study_meta

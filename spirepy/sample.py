@@ -49,7 +49,7 @@ class Sample:
         """
         if self._metadata is None:
             sample_meta = pl.read_csv(
-                f"https://spire.embl.de/api/sample/{self.id}?format=tsv", separator="\t"
+                f"https://spire.embl.de/spire/api/sample/{self.id}?format=tsv", separator="\t"
             )
             self._metadata = sample_meta
         return self._metadata
@@ -62,7 +62,6 @@ class Sample:
         """
         if self._mags is None:
             genome_meta = genome_metadata()
-            metadata = self.get_metadata()
             mags = genome_meta.filter(pl.col("derived_from_sample") == self.id)
             self._mags = mags
         return self._mags
