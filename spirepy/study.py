@@ -76,7 +76,7 @@ class Study:
     def download_assemblies(self, output: str):
         """Download the assemblies into a specified folder.
 
-        :param output: Output folder to download the MAGs to.
+        :param output: Output folder to download the assemblies to.
         :type output: str
         """
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -108,7 +108,7 @@ class Study:
     def download_genecalls(self, output: str):
         """Download the genecalls into a specified folder.
 
-        :param output: Output folder to download the MAGs to.
+        :param output: Output folder to download the genecalls to.
         :type output: str
         """
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -124,7 +124,7 @@ class Study:
     def download_proteins(self, output: str):
         """Download the proteins into a specified folder.
 
-        :param output: Output folder to download the MAGs to.
+        :param output: Output folder to download the proteins to.
         :type output: str
         """
         with tempfile.TemporaryDirectory() as tmpdir:
