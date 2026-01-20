@@ -35,7 +35,7 @@ class TestSample(unittest.TestCase):
 
         # First call - should fetch data
         result1 = self.sample.get_metadata()
-        expected_url = f"https://spire.embl.de/api/sample/{self.sample_id}?format=tsv"
+        expected_url = f"https://spire.embl.de/spire/api/sample/{self.sample_id}?format=tsv"
         mock_read_csv.assert_called_once_with(expected_url, separator="\t")
         assert_frame_equal(result1, mock_data)
 
@@ -45,14 +45,11 @@ class TestSample(unittest.TestCase):
         assert_frame_equal(result2, mock_data)
 
     @patch("spirepy.sample.genome_metadata")
-    @patch.object(Sample, "get_metadata")
     def test_get_mags(
-        self, mock_get_metadata: MagicMock, mock_genome_metadata: MagicMock
+        self,  mock_genome_metadata: MagicMock
     ):
         """Tests get_mags for data processing and caching."""
         # Mock input data
-        mock_get_metadata.return_value = pl.DataFrame({"sample_id": [self.sample_id]})
-
         mock_genome_data = pl.DataFrame(
             {
                 "derived_from_sample": [self.sample_id, "OTHER_SAMPLE", self.sample_id],
@@ -73,13 +70,11 @@ class TestSample(unittest.TestCase):
 
         # First call - should process data
         result1 = self.sample.get_mags()
-        mock_get_metadata.assert_called_once()
         mock_genome_metadata.assert_called_once()
         assert_frame_equal(result1, expected_mags)
 
         # Second call - should use cache
         result2 = self.sample.get_mags()
-        mock_get_metadata.assert_called_once()
         mock_genome_metadata.assert_called_once()
         assert_frame_equal(result2, expected_mags)
 

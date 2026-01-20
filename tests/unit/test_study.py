@@ -29,7 +29,7 @@ class TestStudy(unittest.TestCase):
 
         # First call should fetch data
         result1 = self.study.get_metadata()
-        expected_url = f"https://spire.embl.de/api/study/{self.study_name}?format=tsv"
+        expected_url = f"https://spire.embl.de/spire/api/study/{self.study_name}?format=tsv"
         mock_read_csv.assert_called_once_with(expected_url, separator="\t")
         assert_frame_equal(result1, mock_data)
 
