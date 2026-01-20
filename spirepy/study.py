@@ -67,11 +67,27 @@ class Study:
         if self._mags is None:
             genomes = genome_metadata()
             self._mags = genomes.filter(
-                    pl.col("derived_from_sample").is_in(
-                        self.get_metadata()["sample_id"].to_list()
-                    )
+                pl.col("derived_from_sample").is_in(
+                    self.get_metadata()["sample_id"].to_list()
                 )
+            )
         return self._mags
+
+    def download_assemblies(self, output: str):
+        """Download the assemblies into a specified folder.
+
+        :param output: Output folder to download the MAGs to.
+        :type output: str
+        """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tarfpath = path.join(tmpdir, f"{self.name}_assemblies.tar")
+            urllib.request.urlretrieve(
+                f"https://swifter.embl.de/~fullam/spire/compiled/{self.name}_spire_v1_assemblies.tar",
+                tarfpath,
+            )
+            os.makedirs(output, exist_ok=True)
+            with tarfile.open(tarfpath) as tar:
+                tar.extractall(path.join(output, "assemblies"))
 
     def download_mags(self, output: str):
         """Download the MAGs into a specified folder.
@@ -88,3 +104,35 @@ class Study:
             os.makedirs(output, exist_ok=True)
             with tarfile.open(tarfpath) as tar:
                 tar.extractall(path.join(output, "mags"))
+
+    def download_genecalls(self, output: str):
+        """Download the genecalls into a specified folder.
+
+        :param output: Output folder to download the MAGs to.
+        :type output: str
+        """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tarfpath = path.join(tmpdir, f"{self.name}_genecalls.tar")
+            urllib.request.urlretrieve(
+                f"https://swifter.embl.de/~fullam/spire/genes_per_study/{self.name}_spire_v1_genecalls_fna.tar",
+                tarfpath,
+            )
+            os.makedirs(output, exist_ok=True)
+            with tarfile.open(tarfpath) as tar:
+                tar.extractall(path.join(output, "genecalls"))
+
+    def download_proteins(self, output: str):
+        """Download the proteins into a specified folder.
+
+        :param output: Output folder to download the MAGs to.
+        :type output: str
+        """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tarfpath = path.join(tmpdir, f"{self.name}_genecalls.tar")
+            urllib.request.urlretrieve(
+                f"https://swifter.embl.de/~fullam/spire/genes_per_study/{self.name}_spire_v1_proteins_faa.tar",
+                tarfpath,
+            )
+            os.makedirs(output, exist_ok=True)
+            with tarfile.open(tarfpath) as tar:
+                tar.extractall(path.join(output, "proteins"))
