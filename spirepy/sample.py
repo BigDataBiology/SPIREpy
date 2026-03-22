@@ -115,7 +115,12 @@ class Sample:
             self._amr_annotations[mode] = amr
         return self._amr_annotations[mode]
 
-    def get_contig_depths(self):
+    def get_contig_depths(self) -> pl.DataFrame:
+        """Obtain the contig depth data for the sample.
+
+        :return: A Dataframe with the sample's contig depth data.
+        :rtype: :class:`polars.DataFrame`
+        """
         if self._contig_depths is None:
             cont_depths = pl.read_csv(
                 f"https://spire.embl.de/download_contig_depths/{self.id}",
