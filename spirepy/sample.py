@@ -1,3 +1,4 @@
+from typing import Union
 import os
 import os.path as path
 import urllib.request
@@ -41,24 +42,25 @@ class Sample:
     def __repr__(self):
         return self.__str__()
 
-    def get_metadata(self) -> pl.dataframe.DataFrame:
+    def get_metadata(self) -> pl.DataFrame:
         """Retrieve the metadata for a sample.
 
         :return: A Dataframe with the sample's metadata.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if self._metadata is None:
             sample_meta = pl.read_csv(
-                f"https://spire.embl.de/spire/api/sample/{self.id}?format=tsv", separator="\t"
+                f"https://spire.embl.de/spire/api/sample/{self.id}?format=tsv",
+                separator="\t",
             )
             self._metadata = sample_meta
         return self._metadata
 
-    def get_mags(self) -> pl.dataframe.DataFrame:
+    def get_mags(self) -> pl.DataFrame:
         """Retrieve the MAGs for a sample.
 
         :return: A Dataframe with the sample's MAGs.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if self._mags is None:
             genome_meta = genome_metadata()
@@ -66,11 +68,11 @@ class Sample:
             self._mags = mags
         return self._mags
 
-    def get_eggnog_data(self) -> pl.dataframe.DataFrame:
+    def get_eggnog_data(self) -> pl.DataFrame:
         """Retrive the EggNOG-mapper data for a sample.
 
         :return: A Dataframe with the sample's EggNOG-mapper data.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if self._eggnog_data is None:
             # We need to use pandas because polars does not support reading
@@ -89,14 +91,14 @@ class Sample:
             self._eggnog_data = eggnog_data
         return self._eggnog_data
 
-    def get_amr_annotations(self, mode: str = "deeparg") -> pl.dataframe.DataFrame:
+    def get_amr_annotations(self, mode: str = "deeparg") -> Union[None, pl.DataFrame]:
         """Obtain the anti-microbial resistance annotations for the sample.
 
         :param mode: Tool to select the AMR data from. Options are deepARG (deeparg), abricate-megares (megares) and abricate-vfdb (vfdb); defaults to deepARG.
         :type mode: str, optional
 
         :return: A Dataframe with the sample's AMR data.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if mode not in self._amr_annotations:
             url = {

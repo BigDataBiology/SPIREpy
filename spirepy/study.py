@@ -28,11 +28,11 @@ class Study:
         self._samples = None
         self._mags = None
 
-    def get_metadata(self) -> pl.dataframe.DataFrame:
+    def get_metadata(self) -> pl.DataFrame:
         """Retrieve metadata for the study.
 
         :return: A Dataframe with the study's metadata.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if self._metadata is None:
             study_meta = pl.read_csv(
@@ -58,11 +58,11 @@ class Study:
             self._samples = sample_list
         return self._samples
 
-    def get_mags(self) -> pl.dataframe.DataFrame:
+    def get_mags(self) -> pl.DataFrame:
         """Get a DataFrame with information regarding the MAGs.
 
         :return: A Dataframe with the study's MAGs.
-        :rtype: :class:`polars.dataframe.DataFrame`
+        :rtype: :class:`polars.DataFrame`
         """
         if self._mags is None:
             genomes = genome_metadata()

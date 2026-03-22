@@ -25,7 +25,7 @@ def view(item: Union[Study, Sample], target: str):
             print(study_match())
         else:
             logger.error("No matching item for Study type")
-    else:  # Assumes item is a Sample
+    else: 
         sample_match = {
             "metadata": item.get_metadata,
             "mags": item.get_mags,
