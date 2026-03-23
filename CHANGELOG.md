@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `sample.get_mags()` now correctly reads genome metadata ([eaec357](https://github.com/areias03/SPIREpy/commit/eaec357))
 - Import error resolution ([0e71aa4](https://github.com/areias03/SPIREpy/commit/0e71aa4))
 - Double calls on methods ([febefaf](https://github.com/areias03/SPIREpy/commit/febefaf))
+- Added pyarrow as required dependency for pandas to Polars conversion ([d96b148](https://github.com/areias03/SPIREpy/commit/d96b148))
 
 ### Removed
 - Multithreading utilities ([e06f92a](https://github.com/areias03/SPIREpy/commit/e06f92a))
