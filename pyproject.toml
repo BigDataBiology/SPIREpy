@@ -48,9 +48,9 @@ dependencies = [
 dev = ["pytest"]
 
 [project.urls]
-"Homepage" = "https://github.com/areias03/SPIREpy"
-"Bug Reports" = "https://github.com/areias03/SPIREpy/issues"
-"Source" = "https://github.com/areias03/SPIREpy"
+"Homepage" = "https://github.com/BigDataBiology/SPIREpy"
+"Bug Reports" = "https://github.com/BigDataBiology/SPIREpy/issues"
+"Source" = "https://github.com/BigDataBiology/SPIREpy"
 
 [project.scripts]
 spire = "spirepy.cli:main"
