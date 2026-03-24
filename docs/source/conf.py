@@ -6,6 +6,19 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path
+docs_source = Path(__file__).parent
+project_root = docs_source.parent.parent
+sys.path.insert(0, str(project_root))
+
+# Ensure autoapi output directory exists
+autoapi_output = docs_source / 'autoapi'
+autoapi_output.mkdir(exist_ok=True)
+
 import spirepy
 
 
@@ -28,12 +41,16 @@ extensions = [
 ]
 
 autoapi_dirs = ['../../spirepy']
+autoapi_type = 'python'
+autoapi_root = 'autoapi'
 autoapi_options = [
     'members',
     'undoc-members',
     'show-inheritance',
     'show-module-summary',
 ]
+autoapi_ignore = ['*/__pycache__/*']
+autoapi_keep_files = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
