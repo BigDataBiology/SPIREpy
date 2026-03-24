@@ -40,7 +40,7 @@ extensions = [
     "recommonmark"
 ]
 
-autoapi_dirs = ['../../spirepy']
+autoapi_dirs = [str(project_root / 'spirepy')]
 autoapi_type = 'python'
 autoapi_root = 'autoapi'
 autoapi_options = [
@@ -50,12 +50,15 @@ autoapi_options = [
     'show-module-summary',
     'imported-members',
 ]
-autoapi_ignore = ['*/__pycache__/*', '*/tests/*']
+autoapi_ignore = ['*/__pycache__/*', '*/tests/*', '**/test_*.py']
 autoapi_keep_files = False
 autoapi_add_toctree_entry = True
 
 # Suppress warnings for imports that can't be resolved during doc build
 suppress_warnings = ['autoapi.python_import_resolution']
+
+# Help astroid find installed packages
+autodoc_mock_imports = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
