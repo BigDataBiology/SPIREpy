@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0] - 2026-03-23
+## [0.2.0] - 2026-03-24
 
 ### Added
 - Full download functionality for study data ([e6d9fe9](https://github.com/areias03/SPIREpy/commit/e6d9fe9))
