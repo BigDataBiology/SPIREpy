@@ -21,6 +21,15 @@ autoapi_output.mkdir(exist_ok=True)
 
 import spirepy
 
+# Try to determine spirepy package location
+try:
+    import spirepy
+    spirepy_location = Path(spirepy.__file__).parent
+    print(f"Using installed spirepy from: {spirepy_location}")
+except Exception as e:
+    spirepy_location = project_root / 'spirepy'
+    print(f"Using source spirepy from: {spirepy_location}")
+
 
 project = "SPIREpy"
 copyright = "2025, Big Data Biology Lab"
@@ -40,7 +49,7 @@ extensions = [
     "recommonmark"
 ]
 
-autoapi_dirs = [str(project_root / 'spirepy')]
+autoapi_dirs = [str(spirepy_location)]
 autoapi_type = 'python'
 autoapi_root = 'autoapi'
 autoapi_options = [
@@ -53,6 +62,7 @@ autoapi_options = [
 autoapi_ignore = ['*/__pycache__/*', '*/tests/*', '**/test_*.py']
 autoapi_keep_files = False
 autoapi_add_toctree_entry = True
+autoapi_python_use_implicit_namespaces = True
 
 # Suppress warnings for imports that can't be resolved during doc build
 suppress_warnings = ['autoapi.python_import_resolution']
