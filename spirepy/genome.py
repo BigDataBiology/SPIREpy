@@ -1,4 +1,4 @@
-from spirepy import Sample
+from spirepy.sample import Sample
 
 
 class Genome:

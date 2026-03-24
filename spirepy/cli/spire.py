@@ -1,7 +1,8 @@
 import re
 import argparse
 
-from spirepy import Study, Sample
+from spirepy.study import Study
+from spirepy.sample import Sample
 from spirepy.cli import download, view
 
 

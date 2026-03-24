@@ -2,7 +2,8 @@ import os
 import os.path as path
 from typing import Union
 
-from spirepy import Sample, Study
+from spirepy.sample import Sample
+from spirepy.study import Study
 from spirepy.logger import logger
 
 
