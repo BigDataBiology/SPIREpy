@@ -48,9 +48,14 @@ autoapi_options = [
     'undoc-members',
     'show-inheritance',
     'show-module-summary',
+    'imported-members',
 ]
-autoapi_ignore = ['*/__pycache__/*']
+autoapi_ignore = ['*/__pycache__/*', '*/tests/*']
 autoapi_keep_files = False
+autoapi_add_toctree_entry = True
+
+# Suppress warnings for imports that can't be resolved during doc build
+suppress_warnings = ['autoapi.python_import_resolution']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
